@@ -1,0 +1,36 @@
+<idea-plugin>
+    <id>com.your.company.unique.plugin.id</id>
+    <name>IPP</name>
+    <version>1.0</version>
+    <vendor email="zhaohuzhi@souche.com" url="http://www.dasouche.com">dasouche</vendor>
+
+    <description>This is a idea plugin project. It provide many useful plugin.</description>
+
+    <change-notes>nochange</change-notes>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="173.0"/>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <group id="idea-plugin-plus" text="i-p-p" description="ipp">
+            <add-to-group group-id="MainMenu" anchor="last"/>
+            <action id="create-test" class="com.zhz.idea.plugin.plus.action.TestClassCreatorAction" text="测试类生成工具"
+                    description="用于为service等自动生成对应测试类"/>
+            <action id="hello-world" class="com.zhz.idea.plugin.plus.action.HelloWorldAction"
+                    text="Zhz Hello" description="This is zhz's hello world idea plugin"/>
+        </group>
+    </actions>
+
+
+</idea-plugin>
