@@ -2,8 +2,9 @@ package com.zhz.idea.plugin.plus.domain.aggregate;
 
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifierList;
-import com.zhz.idea.plugin.plus.domain.IClassInfoAggregate;
+import com.zhz.idea.plugin.plus.domain.IClassInfo;
 import com.zhz.idea.plugin.plus.util.ClassInfoIoUtil;
+import com.zhz.idea.plugin.plus.util.PrintTextUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +17,7 @@ import java.util.List;
  * @version 1.0.0
  * @date 2019-04-22 16:07
  */
-public class ClassAgg implements IClassInfoAggregate {
+public class ClassAgg implements IClassInfo {
 
 
     /**
@@ -96,8 +97,8 @@ public class ClassAgg implements IClassInfoAggregate {
     }
 
     @Override
-    public void writeToNewFile() throws IOException {
-        ClassInfoIoUtil.writeTestFile(this);
+    public PrintTextAgg toPrintModel() {
+        return PrintTextUtil.printTextFromClassInfo(this);
     }
 
     public String getData() {

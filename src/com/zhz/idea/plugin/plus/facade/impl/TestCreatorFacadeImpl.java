@@ -5,15 +5,18 @@ import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.impl.source.PsiClassImpl;
 import com.intellij.psi.impl.source.PsiJavaFileImpl;
 import com.zhz.idea.plugin.plus.domain.aggregate.ClassAgg;
 import com.zhz.idea.plugin.plus.domain.exception.IppException;
 import com.zhz.idea.plugin.plus.facade.TestCreatorFacade;
 import com.zhz.idea.plugin.plus.util.Assert;
+import com.zhz.idea.plugin.plus.util.ClassInfoIoUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
@@ -73,13 +76,33 @@ public class TestCreatorFacadeImpl implements TestCreatorFacade {
 
     @Override
     public List<PsiMethod> filterExistsTestMethod(List<PsiMethod> target, List<PsiMethod> existsList) {
-      return  target.stream().filter(method -> isMethodInList(method,existsList)).collect(Collectors.toList());
+        return target.stream().filter(method -> isMethodInList(method, existsList)).collect(Collectors.toList());
     }
 
-    /** 如果方法在list中则过滤 */
-    private boolean isMethodInList(PsiMethod method,List<PsiMethod> methodList){
+    @Override
+    public void appendTestMethodText(PsiClassImpl psi, ClassAgg classAgg) throws IOException {
+        List<PsiMethod> list = Arrays.asList(psi.getMethods());
+        // 过滤掉已存在的方法
+        list = this.filterExistsTestMethod(list, classAgg.getMethods());
+        StringBuilder sb = new StringBuilder();
+        for (PsiMethod method : list) {
+            ClassInfoIoUtil.readMethodInfo(method, sb);
+        }
+        String newInsertMethodString = sb.toString();
+        // 在代码的最后一个}前插入@Test方法
+        String data = ClassInfoIoUtil.readDataFromAbPath(classAgg.getTestPath());
+        // 把类读出string 从最后一个}处删除 （后面会再加上）
+        data = data.substring(0, data.lastIndexOf("}"));
+        data = data + newInsertMethodString + "\n}";
+        ClassInfoIoUtil.writeTestFile(classAgg.getTestPath(), data);
+    }
+
+    /**
+     * 如果方法在list中则过滤
+     */
+    private boolean isMethodInList(PsiMethod method, List<PsiMethod> methodList) {
         for (PsiMethod psiMethod : methodList) {
-            if (psiMethod.getName().equals(method.getName())){
+            if (psiMethod.getName().equals(method.getName())) {
                 return true;
             }
         }

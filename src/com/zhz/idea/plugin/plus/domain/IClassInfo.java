@@ -1,5 +1,7 @@
 package com.zhz.idea.plugin.plus.domain;
 
+import com.zhz.idea.plugin.plus.domain.aggregate.PrintTextAgg;
+
 import java.io.IOException;
 import java.io.Serializable;
 
@@ -9,7 +11,7 @@ import java.io.Serializable;
  * @version 1.0.0
  * @date 2019-04-22 19:23
  */
-public interface IClassInfoAggregate extends Serializable {
+public interface IClassInfo extends Serializable {
 
     /**
      * 获取类名
@@ -38,12 +40,8 @@ public interface IClassInfoAggregate extends Serializable {
      */
     boolean isTestClassExists();
 
-    /**
-     * 写入类文件
-     */
-    /**
-     *
-     * @throws IOException
-     */
-    void writeToNewFile() throws IOException;
+    /** 转化成打印实体 */
+    PrintTextAgg toPrintModel();
+
+
 }

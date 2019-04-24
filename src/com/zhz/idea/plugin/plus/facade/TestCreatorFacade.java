@@ -2,9 +2,11 @@ package com.zhz.idea.plugin.plus.facade;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.impl.source.PsiClassImpl;
 import com.intellij.psi.impl.source.PsiJavaFileImpl;
 import com.zhz.idea.plugin.plus.domain.aggregate.ClassAgg;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -26,6 +28,7 @@ public interface TestCreatorFacade {
 
     /**
      * psiJavaFile解析
+     *
      * @param javaFile
      * @return
      */
@@ -33,6 +36,7 @@ public interface TestCreatorFacade {
 
     /**
      * 字段是否可见
+     *
      * @param psiMethod
      * @return
      */
@@ -40,10 +44,19 @@ public interface TestCreatorFacade {
 
     /**
      * 过滤方法
+     *
      * @param target
      * @param existsList
      */
-    List<PsiMethod> filterExistsTestMethod(List<PsiMethod> target ,List<PsiMethod> existsList);
+    List<PsiMethod> filterExistsTestMethod(List<PsiMethod> target, List<PsiMethod> existsList);
+
+    /**
+     * 向已存在的test文件中添加方法
+     *
+     * @param psiClass
+     * @param source   原来已生成的测试类
+     */
+    void appendTestMethodText(PsiClassImpl psiClass, ClassAgg source) throws IOException;
 
 
 }
