@@ -1,6 +1,5 @@
 package com.zhz.idea.plugin.plus.action;
 
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.project.Project;
@@ -14,7 +13,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.zhz.idea.plugin.plus.domain.aggregate.ClassAgg;
 import com.zhz.idea.plugin.plus.facade.TestCreatorFacade;
 import com.zhz.idea.plugin.plus.facade.impl.TestCreatorFacadeImpl;
-import com.zhz.idea.plugin.plus.util.ClassInfoIoUtil;
+import com.zhz.idea.plugin.plus.util.PrintIOUtil;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -42,17 +41,16 @@ public class TestClassCreatorAction extends AbstractAction {
                     list = facade.filterExistsTestMethod(list, classAgg.getMethods());
                     StringBuilder sb = new StringBuilder();
                     for (PsiMethod method : list) {
-                        ClassInfoIoUtil.readMethodInfo(method, sb);
                     }
                     String newInsertMethodString = sb.toString();
                     Messages.showMessageDialog(project, newInsertMethodString, "Debug", Messages.getInformationIcon());
                     // 在代码的最后一个}前插入@Test方法
-                    String data = ClassInfoIoUtil.readDataFromAbPath(classAgg.getTestPath());
+                    String data = PrintIOUtil.readDataFromAbPath(classAgg.getTestPath());
                     Messages.showMessageDialog(project, data, "Debug", Messages.getInformationIcon());
 // 把类读出string 从最后一个}处删除 （后面会再加上）
                     data = data.substring(0, data.lastIndexOf("}"));
                     data = data + newInsertMethodString + "\n}";
-                    ClassInfoIoUtil.writeTestFile(classAgg.getTestPath(), data);
+                    PrintIOUtil.writeTestFile(classAgg.getTestPath(), data);
 
 
 //                    facade.appendTestMethodText(psi, classAgg);

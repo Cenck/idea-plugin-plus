@@ -3,7 +3,7 @@ package com.zhz.idea.plugin.plus.domain.aggregate;
 import com.zhz.idea.plugin.plus.domain.IPrintText;
 import com.zhz.idea.plugin.plus.domain.vo.MethodPrintVo;
 import com.zhz.idea.plugin.plus.domain.vo.VariableVo;
-import com.zhz.idea.plugin.plus.util.ClassInfoIoUtil;
+import com.zhz.idea.plugin.plus.util.PrintIOUtil;
 import com.zhz.idea.plugin.plus.util.PrintTextUtil;
 
 import java.io.IOException;
@@ -109,6 +109,6 @@ public class PrintTextAgg implements Serializable, IPrintText {
 
     @Override
     public void writeToNewFile() throws IOException {
-        ClassInfoIoUtil.writeTestFile(this.getOutPath(),this.toData());
+        PrintIOUtil.writeTestFile(this.getOutPath(),this.toData());
     }
 }

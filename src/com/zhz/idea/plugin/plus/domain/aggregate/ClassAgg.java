@@ -3,11 +3,9 @@ package com.zhz.idea.plugin.plus.domain.aggregate;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiModifierList;
 import com.zhz.idea.plugin.plus.domain.IClassInfo;
-import com.zhz.idea.plugin.plus.util.ClassInfoIoUtil;
 import com.zhz.idea.plugin.plus.util.PrintTextUtil;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -31,8 +29,6 @@ public class ClassAgg implements IClassInfo {
 
     private String path;
 
-    /** 打印输出数据 */
-    private String data;
 
     /**
      * 获取测试类名
@@ -99,17 +95,6 @@ public class ClassAgg implements IClassInfo {
     @Override
     public PrintTextAgg toPrintModel() {
         return PrintTextUtil.printTextFromClassInfo(this);
-    }
-
-    public String getData() {
-        if (data == null || "".equals(data.trim())){
-            return ClassInfoIoUtil.readClassInfoData(this);
-        }
-        return data;
-    }
-
-    public void setData(String data) {
-        this.data = data;
     }
 
     public List<PsiMethod> getMethods() {
