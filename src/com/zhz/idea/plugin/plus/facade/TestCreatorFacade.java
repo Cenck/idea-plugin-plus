@@ -1,6 +1,7 @@
 package com.zhz.idea.plugin.plus.facade;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.impl.source.PsiClassImpl;
 import com.intellij.psi.impl.source.PsiJavaFileImpl;
@@ -53,10 +54,10 @@ public interface TestCreatorFacade {
     /**
      * 向已存在的test文件中添加方法
      *
-     * @param psiClass
+     * @param psiTestClass
      * @param source   原来已生成的测试类
      */
-    void appendTestMethodText(PsiClassImpl psiClass, ClassAgg source) throws IOException;
+    void appendTestMethodText(PsiClass psiTestClass, ClassAgg source) throws IOException;
 
 
 }

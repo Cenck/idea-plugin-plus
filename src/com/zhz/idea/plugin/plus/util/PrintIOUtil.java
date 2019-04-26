@@ -50,7 +50,7 @@ public class PrintIOUtil {
         BufferedReader br = new BufferedReader(isr);
         StringBuilder sb = new StringBuilder();
         String s;
-        while ((s = br.readLine()) != null && s.length() != 0) {
+        while ((s = br.readLine()) != null) {
             sb.append(s).append("\n");
         }
         fis.close();

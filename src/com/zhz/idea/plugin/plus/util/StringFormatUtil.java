@@ -42,7 +42,7 @@ public class StringFormatUtil {
 
 
     /**
-     * 从类型中提取类
+     * 从类型中提取类，供包名后 import
      * java.util.List<java.lang.object> 可以提出java.util.List和 java.lang.object
      *
      * @param type

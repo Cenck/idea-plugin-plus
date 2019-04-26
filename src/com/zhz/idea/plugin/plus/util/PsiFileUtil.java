@@ -17,6 +17,7 @@ import com.intellij.psi.search.GlobalSearchScope;
  * @version 1.0.0
  * @date 2019-04-19 15:05
  */
+@Deprecated
 public class PsiFileUtil {
 
     private PsiFileUtil() {
