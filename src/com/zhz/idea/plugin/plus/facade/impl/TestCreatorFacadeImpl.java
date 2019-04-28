@@ -96,7 +96,7 @@ public class TestCreatorFacadeImpl implements TestCreatorFacade {
             // 过滤掉已存在的方法
             list = this.filterExistsTestMethod(list, existsList);
             if (list==null || list.size()==0){
-                return;
+                throw new IppException("无新方法增加");
             }
             // 读取新方法
             PsiMethodOutDto dto = PrintTextUtil.appendMethodsToPrintAgg(list);

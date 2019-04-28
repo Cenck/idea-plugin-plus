@@ -150,7 +150,7 @@ public class PrintTextUtil {
             // 生成对该方法的调用
             sb.append("        ");
             if (!"void".equals(m.getReturnType().getType())) {
-                sb.append(m.getReturnType().getType()).append(" ").append(m.getReturnType().getName()).append(" = ");
+                sb.append(m.getReturnType().getType()).append(" ").append(getResultName(m.getReturnType().getName())).append(" = ");
             }
             if (m.isStatic()) {
                 sb.append(defaultService.getType());
@@ -189,6 +189,31 @@ public class PrintTextUtil {
                 return "0.0";
             default:
                 return "null";
+        }
+    }
+
+    /**
+     * 返回方法调用结果的参数名
+     * @param type
+     * @return
+     */
+    private static String getResultName(String type) {
+        switch (type.trim()) {
+            case "int":
+            case "short":
+            case "byte":
+                return "num";
+            case "long":
+                return "l";
+            case "char":
+                return "c";
+            case "boolean":
+                return "bool";
+            case "float":
+            case "double":
+                return "doub";
+            default:
+                return "type";
         }
     }
 }
