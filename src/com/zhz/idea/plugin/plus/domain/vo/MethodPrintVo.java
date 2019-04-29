@@ -1,5 +1,7 @@
 package com.zhz.idea.plugin.plus.domain.vo;
 
+import org.apache.http.util.TextUtils;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +17,10 @@ public class MethodPrintVo implements Serializable {
     private boolean isStatic;
     private VariableVo returnType;
     private String methodName;
+    /**
+     * 测试方法名 可能和实际调用方法名不同
+     */
+    private String testMethodName;
     private List<VariableVo> paramList = new ArrayList<>();
 
     public VariableVo getReturnType() {
@@ -49,6 +55,17 @@ public class MethodPrintVo implements Serializable {
         isStatic = aStatic;
     }
 
+    public String getTestMethodName() {
+        if (TextUtils.isBlank(this.testMethodName)) {
+            return this.getMethodName();
+        }
+        return testMethodName;
+    }
+
+    public void setTestMethodName(String testMethodName) {
+        this.testMethodName = testMethodName;
+    }
+
     @Override
     public int hashCode() {
         return super.hashCode();
@@ -56,8 +73,13 @@ public class MethodPrintVo implements Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof MethodPrintVo){
-            return ((MethodPrintVo) obj).methodName.endsWith(methodName);
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof MethodPrintVo) {
+            // 方法名相同，参数列表相等，才被认为是同一个方法
+            boolean isNameEqual = ((MethodPrintVo) obj).methodName != null && ((MethodPrintVo) obj).methodName.equals(methodName);
+            return isNameEqual && this.paramList.equals(((MethodPrintVo) obj).getParamList());
         }
         return super.equals(obj);
     }

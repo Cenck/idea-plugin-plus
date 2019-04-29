@@ -29,7 +29,9 @@ public class PrintTextAgg implements Serializable, IPrintText {
     //输出路径
     private String outPath;
     private String superClass;
-    /** 默认服务 */
+    /**
+     * 默认服务
+     */
     private VariableVo defaultService;
     /**
      * 全局变量
@@ -79,6 +81,7 @@ public class PrintTextAgg implements Serializable, IPrintText {
     }
 
     public Set<MethodPrintVo> getMethods() {
+        this.renderMethods();
         return methods;
     }
 
@@ -109,6 +112,20 @@ public class PrintTextAgg implements Serializable, IPrintText {
 
     @Override
     public void writeToNewFile() throws IOException {
-        PrintIOUtil.writeTestFile(this.getOutPath(),this.toData());
+        PrintIOUtil.writeTestFile(this.getOutPath(), this.toData());
+    }
+
+    @Override
+    public void renderMethods() {
+        Set<String> set = new HashSet<>(methods.size());
+        for (MethodPrintVo method : methods) {
+            String testMethodName = method.getMethodName();
+            if (set.contains(testMethodName)) {
+                // 集合有值，重命名
+                testMethodName = method.getMethodName() + "_1";
+                method.setTestMethodName(testMethodName);
+            }
+            set.add(testMethodName);
+        }
     }
 }

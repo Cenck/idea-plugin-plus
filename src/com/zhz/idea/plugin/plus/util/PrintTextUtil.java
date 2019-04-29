@@ -20,10 +20,16 @@ import java.util.Set;
  * @date 2019-04-24 15:31
  */
 public class PrintTextUtil {
+
     private PrintTextUtil() {
     }
 
 
+    /**
+     * 从类信息中转化出 打印对象实体
+     * @param classInfo
+     * @return
+     */
     public static PrintTextAgg printTextFromClassInfo(ClassAgg classInfo) {
         PrintTextAgg agg = new PrintTextAgg();
         agg.setClassName(classInfo.getTestName());
@@ -50,6 +56,11 @@ public class PrintTextUtil {
         return agg;
     }
 
+    /**
+     * 向打印实体中添加方法
+     * @param methods
+     * @return
+     */
     public static PsiMethodOutDto appendMethodsToPrintAgg(List<PsiMethod> methods) {
         PsiMethodOutDto dto = new PsiMethodOutDto();
         if (methods != null) {
@@ -136,7 +147,7 @@ public class PrintTextUtil {
 
     public static void appendMethod(MethodPrintVo m, StringBuilder sb, VariableVo defaultService) {
         sb.append("    @Test\n");
-        sb.append("    public void ").append(m.getMethodName()).append("(){ \n");
+        sb.append("    public void ").append(m.getTestMethodName()).append("(){ \n");
         // 参数生成
         if (m.getParamList() != null && m.getParamList().size() > 0) {
             for (int i = 0; i < m.getParamList().size(); i++) {
@@ -194,6 +205,7 @@ public class PrintTextUtil {
 
     /**
      * 返回方法调用结果的参数名
+     *
      * @param type
      * @return
      */
@@ -213,7 +225,7 @@ public class PrintTextUtil {
             case "double":
                 return "doub";
             default:
-                return "type";
+                return type;
         }
     }
 }

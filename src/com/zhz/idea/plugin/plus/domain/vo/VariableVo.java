@@ -27,6 +27,9 @@ public class VariableVo implements Serializable {
     }
 
     public String getType() {
+        if (this.type!=null && "T".equals(this.type.trim())){
+            return "Object";
+        }
         return type;
     }
 

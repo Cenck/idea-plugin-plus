@@ -16,4 +16,11 @@ public interface IPrintText {
      */
     void writeToNewFile() throws IOException;
 
+
+    /**
+     * 重新优化方法，为重载的方法(方法名重复)重新起名
+     * 保证打印的方法名不能重复
+     */
+    void renderMethods();
+
 }
