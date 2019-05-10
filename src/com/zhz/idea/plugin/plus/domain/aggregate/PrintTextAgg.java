@@ -3,6 +3,7 @@ package com.zhz.idea.plugin.plus.domain.aggregate;
 import com.zhz.idea.plugin.plus.domain.IPrintText;
 import com.zhz.idea.plugin.plus.domain.vo.MethodPrintVo;
 import com.zhz.idea.plugin.plus.domain.vo.VariableVo;
+import com.zhz.idea.plugin.plus.service.TestMethodNameResolver;
 import com.zhz.idea.plugin.plus.util.PrintIOUtil;
 import com.zhz.idea.plugin.plus.util.PrintTextUtil;
 
@@ -37,7 +38,7 @@ public class PrintTextAgg implements Serializable, IPrintText {
      * 全局变量
      */
     private List<VariableVo> vars = new ArrayList<>();
-    private Set<MethodPrintVo> methods = new HashSet<>();
+    private List<MethodPrintVo> methods = new ArrayList<>();
 
 
     public String getPkg() {
@@ -80,13 +81,17 @@ public class PrintTextAgg implements Serializable, IPrintText {
         this.vars = vars;
     }
 
-    public Set<MethodPrintVo> getMethods() {
-        this.renderMethods();
-        return methods;
+    public void setMethods(List<MethodPrintVo> methods) {
+        this.methods = methods;
     }
 
-    public void setMethods(Set<MethodPrintVo> methods) {
-        this.methods = methods;
+    /**
+     *
+     * @return
+     */
+    public List<MethodPrintVo> getMethods() {
+        this.renderMethods();
+        return methods;
     }
 
     public VariableVo getDefaultService() {
@@ -119,13 +124,11 @@ public class PrintTextAgg implements Serializable, IPrintText {
     public void renderMethods() {
         Set<String> set = new HashSet<>(methods.size());
         for (MethodPrintVo method : methods) {
-            String testMethodName = method.getMethodName();
-            if (set.contains(testMethodName)) {
-                // 集合有值，重命名
-                testMethodName = method.getMethodName() + "_1";
-                method.setTestMethodName(testMethodName);
-            }
-            set.add(testMethodName);
+            String methodName = method.getMethodName();
+            String testName = TestMethodNameResolver.getInstance().getTestName(methodName, set);
+            method.setTestMethodName(testName);
         }
     }
+
+
 }

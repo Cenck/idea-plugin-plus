@@ -74,7 +74,7 @@ public class HelloWorldAction extends AbstractAction {
 
 
         String debug = sb.toString();
-        Messages.showMessageDialog(project,"hello", "Warning", Messages.getInformationIcon());
+        Messages.showMessageDialog(project,"Hello,Ipp!", "Warning", Messages.getInformationIcon());
 
 
     }

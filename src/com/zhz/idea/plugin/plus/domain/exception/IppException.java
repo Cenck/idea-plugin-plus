@@ -11,9 +11,9 @@ import org.apache.log4j.spi.ErrorCode;
  */
 public class IppException extends RuntimeException{
 
-    private String code;
+    String code;
 
-    private Object data;
+    Object data;
 
     public IppException(){
         super();

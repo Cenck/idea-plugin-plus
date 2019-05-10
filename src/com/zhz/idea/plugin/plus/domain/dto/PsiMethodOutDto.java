@@ -18,16 +18,16 @@ import java.util.Set;
 public class PsiMethodOutDto implements Serializable {
 
     /** 新增的类方法 */
-    private Set<MethodPrintVo> appendMethodList;
+    private List<MethodPrintVo> appendMethodList;
     /** 新增导入 */
     private Set<String> newImportList;
 
 
-    public Set<MethodPrintVo> getAppendMethodList() {
+    public List<MethodPrintVo> getAppendMethodList() {
         return appendMethodList;
     }
 
-    public void setAppendMethodList(Set<MethodPrintVo> appendMethodList) {
+    public void setAppendMethodList(List<MethodPrintVo> appendMethodList) {
         this.appendMethodList = appendMethodList;
     }
 

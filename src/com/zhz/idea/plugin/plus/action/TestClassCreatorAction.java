@@ -10,6 +10,7 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.zhz.idea.plugin.plus.domain.aggregate.ClassAgg;
 import com.zhz.idea.plugin.plus.domain.enums.ErrorCodeEnums;
 import com.zhz.idea.plugin.plus.domain.exception.IppException;
+import com.zhz.idea.plugin.plus.domain.exception.SuccessException;
 import com.zhz.idea.plugin.plus.facade.TestCreatorFacade;
 import com.zhz.idea.plugin.plus.facade.impl.TestCreatorFacadeImpl;
 import com.zhz.idea.plugin.plus.service.PsiFileService;
@@ -35,11 +36,11 @@ public class TestClassCreatorAction extends AbstractAction {
                 String classQualifiedName = classAgg.getPkg() + "." + classAgg.getTestName();
                 PsiClass psiClass = JavaPsiFacade.getInstance(project).findClass(classQualifiedName, GlobalSearchScope.projectScope(project));
                 facade.appendTestMethodText(psiClass, classAgg);
-                throw new IppException("更新成功");
+                throw new SuccessException("更新成功");
             } else {
                 // 全新生成一个测试类
                 classAgg.toPrintModel().writeToNewFile();
-                throw new IppException("新增成功");
+                throw new SuccessException("新增成功");
             }
 
         } catch (IppException ippe) {

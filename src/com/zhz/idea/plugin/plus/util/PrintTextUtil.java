@@ -10,6 +10,7 @@ import com.zhz.idea.plugin.plus.domain.dto.PsiMethodOutDto;
 import com.zhz.idea.plugin.plus.domain.vo.MethodPrintVo;
 import com.zhz.idea.plugin.plus.domain.vo.VariableVo;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -64,7 +65,7 @@ public class PrintTextUtil {
     public static PsiMethodOutDto appendMethodsToPrintAgg(List<PsiMethod> methods) {
         PsiMethodOutDto dto = new PsiMethodOutDto();
         if (methods != null) {
-            Set<MethodPrintVo> voList = new HashSet<>(methods.size());
+            List<MethodPrintVo> voList = new ArrayList<>(methods.size());
             Set<String> importSet = new HashSet<>(methods.size());
             methods.forEach(method -> {
                 MethodPrintVo methodVo = new MethodPrintVo();

@@ -25,10 +25,10 @@
         <!-- Add your actions here -->
         <group id="idea-plugin-plus" text="i-p-p" description="ipp">
             <add-to-group group-id="MainMenu" anchor="last"/>
-            <action id="create-test" class="com.zhz.idea.plugin.plus.action.TestClassCreatorAction" text="测试类生成工具"
+            <action id="create-test" class="com.zhz.idea.plugin.plus.action.TestClassCreatorAction" text="Generate Test Code"
                     description="用于为service等自动生成对应测试类"/>
             <action id="hello-world" class="com.zhz.idea.plugin.plus.action.HelloWorldAction"
-                    text="Zhz Hello" description="This is zhz's hello world idea plugin"/>
+                    text="HelloWorld" description="This is zhz's hello world idea plugin"/>
         </group>
     </actions>
 

@@ -62,12 +62,14 @@ public class StringFormatUtil {
             return;
         }
         clazz = clazz.trim();
-        if (clazz.startsWith("java.lang.")) {
-            //lang包不需要导入
+        if (clazz.startsWith("java.lang.")
+            || "T".equals(clazz)
+            || "void".equals(clazz)
+            || clazz.contains("extends")) {
+            //lang包不需要导入,泛型不导入
             return;
         }
-        if ("void".equals(clazz)
-                || "boolean".equals(clazz)
+        if ("boolean".equals(clazz)
                 || "double".equals(clazz)
                 || "long".equals(clazz)
                 || "char".equals(clazz)

@@ -10,6 +10,7 @@ import com.intellij.psi.impl.source.PsiJavaFileImpl;
 import com.zhz.idea.plugin.plus.domain.aggregate.ClassAgg;
 import com.zhz.idea.plugin.plus.domain.dto.PsiMethodOutDto;
 import com.zhz.idea.plugin.plus.domain.exception.IppException;
+import com.zhz.idea.plugin.plus.domain.exception.SuccessException;
 import com.zhz.idea.plugin.plus.domain.vo.MethodPrintVo;
 import com.zhz.idea.plugin.plus.domain.vo.VariableVo;
 import com.zhz.idea.plugin.plus.facade.TestCreatorFacade;
@@ -81,8 +82,8 @@ public class TestCreatorFacadeImpl implements TestCreatorFacade {
 
     @Override
     public List<PsiMethod> filterExistsTestMethod(List<PsiMethod> target, List<PsiMethod> existsList) {
-        // 过滤不可见和 已存在于测试类的方法
-        return target.stream().filter(method -> (!isMethodVisible(method) || !isMethodInList(method, existsList))).collect(Collectors.toList());
+        // 过滤 只需要方法可见，并且不在旧test文件中
+        return target.stream().filter(method -> (isMethodVisible(method) && !isMethodInList(method, existsList))).collect(Collectors.toList());
     }
 
     @Override
@@ -95,30 +96,33 @@ public class TestCreatorFacadeImpl implements TestCreatorFacade {
             List<PsiMethod> list = classAgg.getMethods();
             // 过滤掉已存在的方法
             list = this.filterExistsTestMethod(list, existsList);
-            if (list==null || list.size()==0){
-                throw new IppException("无新方法增加");
+            if (list == null || list.size() == 0) {
+                throw new SuccessException("无更新");
             }
             // 读取新方法
             PsiMethodOutDto dto = PrintTextUtil.appendMethodsToPrintAgg(list);
+            StringBuilder newMethodListSb = new StringBuilder("    /*===============插入新方法开始================*/\n");
+            for (PsiMethod method : list) {
+                newMethodListSb.append("    //  ").append(method.getName()).append("\n");
+            }
 
             // 在代码的最后一个}前插入新添加的Test方法
             String data = PrintIOUtil.readDataFromAbPath(classAgg.getTestPath());
             String newImportString = this.getNewImportString(dto.getNewImportList());
-            if (newImportString.trim().length()>0){
+            if (newImportString.trim().length() > 0) {
                 data = data.replaceFirst("import", newImportString + "\nimport ");
             }
 
             // 把类读出string 从最后一个}处删除 （后面会再加上）
             data = data.substring(0, data.lastIndexOf("}"));
-            String newInsertMethodString = this.getNewTestMethodsPrintString(dto.getAppendMethodList(), classAgg.toPrintModel().getDefaultService());
+            String newInsertMethodString = this.getNewTestMethodsPrintString(newMethodListSb, dto.getAppendMethodList(), classAgg.toPrintModel().getDefaultService());
             // 添加并补上}
-            if (newInsertMethodString.trim().length()>0){
+            if (newInsertMethodString.trim().length() > 0) {
                 data = data + newInsertMethodString + "\n}";
             }
             PrintIOUtil.writeTestFile(classAgg.getTestPath(), data);
         }
     }
-
 
     private String getNewImportString(Set<String> importPkgs) {
         StringBuilder sb = new StringBuilder();
@@ -136,24 +140,39 @@ public class TestCreatorFacadeImpl implements TestCreatorFacade {
      * @param defaultService
      * @return
      */
-    private String getNewTestMethodsPrintString(Set<MethodPrintVo> methodList, VariableVo defaultService) {
-        StringBuilder newMethodListSb = new StringBuilder();
+    private String getNewTestMethodsPrintString(StringBuilder sb, List<MethodPrintVo> methodList, VariableVo defaultService) {
         if (methodList != null && methodList.size() > 0) {
-            methodList.forEach(m -> PrintTextUtil.appendMethod(m, newMethodListSb, defaultService));
+            methodList.forEach(m -> PrintTextUtil.appendMethod(m, sb, defaultService));
         }
-        return newMethodListSb.toString();
+        return sb.toString();
     }
 
     /**
-     * 如果方法在list中则过滤
+     * 如果方法在旧Test文件中则过滤
+     * 比较方法相同时，方法名和参数列表相同
      */
     private boolean isMethodInList(PsiMethod method, List<PsiMethod> methodList) {
         for (PsiMethod psiMethod : methodList) {
             if (psiMethod.getName().equals(method.getName())) {
+                // 方法名相同，再比较参数列表
                 return true;
+                /*
+                测试方法没有参数列表，所有没有办法比较参数列表：也就是说，无法为重载的方法 新增测试方法
+                 */
+//                if (this.paramListToString(psiMethod).equals(this.paramListToString(method))) {
+//                    return true;
+//                }
             }
         }
         return false;
+    }
+
+    private String paramListToString(PsiMethod psiMethod) {
+        StringBuilder sb = new StringBuilder();
+        for (Object parameter : psiMethod.getParameterList().getParameters()) {
+            sb.append(parameter.getClass().getName());
+        }
+        return sb.toString();
     }
 
 }
